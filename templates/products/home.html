@@ -1,20 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    {% extends 'base.html' %}
+{% extends 'base.html' %}
 
-    {% block content %}
+{% block content %}
 
+{% for product in products.all %}
 
-login!
+<div class="row pt-3">
+  <div class="col-2" onclick="window.location='{% url 'detail' product.id %}';" style="cursor: pointer;">
+  	<img src="{{ product.icon.url }}" class="img-fluid" />
+  </div>
+  <div class="col-6" onclick="window.location='{% url 'detail' product.id %}';" style="cursor: pointer;">
+    <h1>{{ product.title }}</h1>
+    <p>{{ product.summary }}</p>
+  </div>
+  <div class="col-4">
+  	<a href="javascript:{document.getElementById('upvote{{product.id}}').submit()}"><button class="btn btn-outline-primary btn-lg btn-block"><span class="oi oi-caret-top"></span> Upvote {{ product.vote_total }}</a>
+  </div>
+ </div>
+
+<form id="upvote{{product.id}}" method="POST" action="{% url 'upvote' product.id %}">
+{% csrf_token %}
+<input type="hidden">
+</form>
+
+{% endfor %}
 
 {% endblock %}
-
-</body>
-</html>
