@@ -1,37 +1,80 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-from django.contrib import auth
+from django.shortcuts import render, redirect,get_object_or_404
+from django.contrib.auth import login, authenticate, logout
+from .forms import RegistrationForm, AuthenticationForm, AccountUpdateForm
 
-def login(request):
-	if request.method == 'POST':
-		user = auth.authenticate(username=request.POST['username'],password=request.POST['password'])
-		#Validation of login/return to home page
-		if user is not None:
-			auth.login(request, user)
-			return redirect('home')
-		#if login fails, return to login with error
-		else:
-			return render(request, 'accounts/login.html', {'error':'Those credentials are not valid.'})
-	else:
-		return render(request, 'accounts/login.html')
 
-def signup(request):
-	if request.method == 'POST':
-		# User is signing up
-		if request.POST['password1'] == request.POST['password2']:
-			try:
-				user = User.objects.get(username=request.POST['username'])
-				return render(request, 'accounts/signup.html', {'error':'That user exists already.'})
-			except User.DoesNotExist:
-				user = User.objects.create_user(request.POST['username'], password=request.POST['password1'])
-				auth.login(request, user)
-				return redirect('home')
-		else:return render(request, 'accounts/signup.html', {'error':'Passwords must match.'})
-	else:
-		#show the signup page
-		return render(request, 'accounts/signup.html')
+def registration_view(request):
+    context = {}
+    if request.POST:
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            email = form.cleaned_data.get('email')
+            raw_password = form.cleaned_data.get('password1')
+            account = authenticate(email=email, password=raw_password)
+            login(request, account)
+            return redirect('home')
+        else:
+            context['registration_form'] = form
 
-def logout(request):
-	if request.method == 'POST':
-		auth.logout(request)
-		return redirect('home')
+    else:
+        form = RegistrationForm()
+        context['registration_form'] = form
+    return render(request, 'accounts/signup.html', context)
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
+
+
+def login_view(request):
+    context = {}
+    user = request.user
+    if user.is_authenticated:
+        return redirect('home')
+    if request.POST:
+        form = AuthenticationForm(request.POST)
+        if form.is_valid():
+            email = request.POST['email']
+            password = request.POST['password']
+            user = authenticate(email=email, password=password)
+            if user:
+                login(request, user)
+                return redirect('home')
+    else:
+        form = AuthenticationForm()
+    context['login_form'] = form
+    return render(request, 'accounts/login.html', context)
+
+
+# def profile_view(request):
+#     if not request.user.is_authenticated:
+#         return redirect("login")
+#     context = {}
+#     if request.POST:
+#         form = AccountUpdateForm(request.POST, instance=request.user)
+#         if form.is_valid():
+#             form.initial = {
+#                 "email": request.POST['email'],
+#                 "username": request.POST['username'],
+#             }
+#             form.save()
+#             context['success_message'] = "Updated"
+#     else:
+#         form = AccountUpdateForm(
+
+#             initial={
+#                 "email": request.user.email,
+#                 "username": request.user.username,
+#             }
+#         )
+
+#     context['profile_form'] = form
+#     blog_posts = Post.objects.filter(author=request.user)
+#     context['blog_posts'] = blog_posts
+#     return render(request, "accounts/profile.html", context)
+
+
+# def must_authenticate_view(request):
+#     return render(request, 'accounts/must_authenticate.html', {})
