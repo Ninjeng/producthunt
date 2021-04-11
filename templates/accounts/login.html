@@ -2,26 +2,43 @@
 
 {% block content %}
 
-{% if error %}
-{{ error }}
-<br />
-<br />
-{% endif %}
-<h1>Login</h1>
-
-<form method="POST" action="{% url 'login' %}">
-{% csrf_token %}
-Username
-<br />
-<input type="text" name="username">
-<br />
-Password
-<br />
-<input type="password" name="password" />
-<br />
-<br />
-<input class="btn btn-outline-secondary" type="submit" value="Login" />
-
-</form>
+<div id="login" class="col">
+    <h1 class="text-center text-white pt-5"></h1>
+    <div class="container center ">
+        <div id="login-row" class="row justify-content-center align-items-center">
+            <div id="login-column" class="col-md-10">
+                <div id="login-box" class="col-md-12">
+                    <form class="form" method="post">
+                        {% csrf_token %}
+                        <h3 class="text-center text-primary">Login</h3>
+                        <div class="form-group">
+                            <label for="email" class="text-info">Email:</label><br>
+                            <input type="email" name="email" id="email" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="text-info">Password:</label><br>
+                            <input type="password" name="password" id="password" class="form-control">
+                        </div>
+                        {% for field in login_form %}
+                        <p>
+                            {% for error in field.errors %}
+                        <p style="color: red">{{ error }}</p>
+                        {% endfor %}
+                        </p>
+                        {% endfor %}
+                        {% if login_form.non_field_errors %}
+                        <div style="color: red">
+                            <p>{{login_form.non_field_errors}}</p>
+                        </div>
+                        {% endif %}
+                        <div class="form-group">
+                            <input type="submit" name="submit" class="btn btn-primary btn-md" value="Login">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

@@ -18,6 +18,9 @@
   <body>
     <header>
       {%if request.user.is_authenticated%}
+      <li class="nav-item">
+        <a class="nav-link" href="{%url 'logout'%}">{{request.user.username}} Logout</a>
+    </li>
       <!-- todo add logged in user's view -->
       <p>hey you are logged in</p>
       {%endif%}
@@ -35,7 +38,7 @@
               <a class="nav-link" href="{%url 'signup'%}">Sign up</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="">Log In</a>
+              <a class="nav-link" href="{% url 'login' %}">Log In</a>
             </li>
 
             </li> 
