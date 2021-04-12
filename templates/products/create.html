@@ -7,33 +7,59 @@
 <br />
 <br />
 {% endif %}
-<h1>Create</h1>
 
-<form method="POST" action="{% url 'create' %}" enctype="multipart/form-data">
-{% csrf_token %}
-Title:
-<br />
-<input type="text" name="title">
-<br />
-Body:
-<br />
-<input type="textbox" name="body" />
-<br />
-URL:
-<br />
-<input type="text" name="url">
-<br />
-Icon:
-<br />
-<input type="file" name="icon">
-<br />
-Image:
-<br />
-<input type="file" name="image">
-<br />
-<br />
-<input class="btn btn-outline-secondary" type="submit" value="Add Product" />
 
-</form>
+<div id="login" class="col">
+    <h1 class="text-center text-black pt-5"> </h1>
+    <div class="container center ">
+        <div id="login-row" class="row justify-content-center align-items-center">
+            <div id="login-column" class="col-md-10">
+                <div id="login-box" class="col-md-12">
+                    <form class="form" method="post" action="{% url 'create' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <h2 class="text-center text-danger">Create post</h2>
+                        <div class="form-group">
+                            <label for="title" class="text-danger">Title:</label><br>
+                            <input type="text" name="title" id="title" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="body" class="text-danger">Body:</label><br>
+                            <input type="textbox" name="body" id="body" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="url" class="text-danger">Url:</label><br>
+                            <input type="text" name="url" id="url" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="icon" class="text-danger">Icon:</label><br>
+                            <input type="file" name="icon" id="icon" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="image" class="text-danger">Image:</label><br>
+                            <input type="file" name="image" id="image" class="form-control">
+                        </div>
+                  
+                        {% for field in registration_form %}
+                        <p>
+                            {% for error in field.errors %}
+                        <p style="color: red">{{ error }}</p>
+                        {% endfor %}
+                        </p>
+                        {% endfor %}
+                        {% if registration_form.non_field_errors %}
+                        <div style="color: red">
+                            <p>{{registration_form.non_field_errors}}</p>
+                        </div>
+                        {% endif %}
+
+                        <div class="form-group">
+                            <input type="submit" name="submit" class="btn btn-danger btn-md" value="Add Product">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

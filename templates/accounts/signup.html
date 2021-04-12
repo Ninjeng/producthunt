@@ -1,28 +1,28 @@
 {% extends "base.html"%}
 {%block content %}
 <div id="login" class="col">
-    <h1 class="text-center text-white pt-5"></h1>
+    <h1 class="text-center text-black pt-5"> </h1>
     <div class="container center ">
         <div id="login-row" class="row justify-content-center align-items-center">
             <div id="login-column" class="col-md-10">
                 <div id="login-box" class="col-md-12">
                     <form class="form" method="post">
                         {% csrf_token %}
-                        <h3 class="text-center text-primary">SignUp</h3>
+                        <h2 class="text-center text-danger">SignUp</h2>
                         <div class="form-group">
-                            <label for="email" class="text-info">Email:</label><br>
+                            <label for="email" class="text-danger">Email:</label><br>
                             <input type="email" name="email" id="email" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label for="username" class="text-info">UserName:</label><br>
+                            <label for="username" class="text-danger">UserName:</label><br>
                             <input type="text" name="username" id="username" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label for="password" class="text-info">Password:</label><br>
+                            <label for="password" class="text-danger">Password:</label><br>
                             <input type="password" name="password1" id="password" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label for="password" class="text-info">Confirm Password:</label><br>
+                            <label for="password" class="text-danger">Confirm Password:</label><br>
                             <input type="password" name="password2" id="confirm " class="form-control">
                         </div>
                         {% for field in registration_form %}
@@ -39,7 +39,7 @@
                         {% endif %}
 
                         <div class="form-group">
-                            <input type="submit" name="submit" class="btn btn-primary btn-md" value="SignUp">
+                            <input type="submit" name="submit" class="btn btn-danger btn-md" value="SignUp">
                         </div>
                     </form>
                 </div>

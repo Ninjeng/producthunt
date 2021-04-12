@@ -1,12 +1,19 @@
 <style type="text/css">
 	.card{
-		max-width: 700px;
+		max-width: 800px;
 	}
 	.card-body{
-		padding: 20px;
 		width:100%;
-
+        background-color: #EC1348 !important;
 	}
+    .card-title{
+        color: white  !important;
+        padding: 0%;
+    }
+    .small-image{
+        width: 50px;
+        height: 50px;
+    }
 </style>
         {% if products %}
 
@@ -15,13 +22,12 @@
 
         <!-- Blog Post -->
         <div class="card m-auto">
-            <a href="{% url 'details' post.slug %}">
-                <img class="card-img-top" src="{{products.image.url}}">
-            </a>
+      
 
-            <div class="card-body mt-2 mb-2">
+            <div class="card-body mt-1 mb-1">
                 <a href="{% url 'details' post.slug %}">
-                    <h2 class="card-title">{{products.product_name}}</h2>
+                    <img src="{{product.image.icon}}" alt="img">
+                    <h4 class="card-title">{{products.product_name}}</h4>
                 </a>
                 <p class="card-text">{{products.body|safe|truncatechars:180}}</p>
                 {% if products.author == request.user %}
@@ -31,10 +37,15 @@
 
                 </div>
             </div>
+            <a href="{% url 'details' post.slug %}">
+                <img class="card-img-top" src="{{products.image.url}}">
+            </a>
 
+            {% if products.upvote != 0 %}
             <div class="card-footer text-muted">
-                Updated on {{products.date_updated}} by {{products.author}}
+                Upvote {{products.upvote}} 
             </div>
+            {% endif %}
 
         </div>
     </div>
