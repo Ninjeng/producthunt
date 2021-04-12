@@ -1,10 +1,11 @@
 <style type="text/css">
 	.card{
+        border-radius: 10px;
 		max-width: 800px;
 	}
 	.card-body{
 		width:100%;
-        background-color: #EC1348 !important;
+        padding: 0;
 	}
     .card-title{
         color: white  !important;
@@ -15,32 +16,25 @@
         height: 50px;
     }
 </style>
-        {% if products %}
+{% if products %}
 
 <div class="container mt-2">
     <div class="row">
 
         <!-- Blog Post -->
-        <div class="card m-auto">
-      
-
+        <div class="card m-auto mt-5 mb-5">
             <div class="card-body mt-1 mb-1">
                 <a href="{% url 'details' post.slug %}">
-                    <img src="{{product.image.icon}}" alt="img">
-                    <h4 class="card-title">{{products.product_name}}</h4>
+                    <img class="card-img-top" src="{{products.image.url}}">
                 </a>
-                <p class="card-text">{{products.body|safe|truncatechars:180}}</p>
+    
+                <p class="card-text ">{{products.description|safe|truncatechars:180}}</p>
                 {% if products.author == request.user %}
                 <a href="{% url 'edit' post.slug %}" class="btn btn-primary">Update</a>
                 {% endif %}
-                <div class="container mt-2">
-
-                </div>
+               
             </div>
-            <a href="{% url 'details' post.slug %}">
-                <img class="card-img-top" src="{{products.image.url}}">
-            </a>
-
+            
             {% if products.upvote != 0 %}
             <div class="card-footer text-muted">
                 Upvote {{products.upvote}} 
@@ -55,7 +49,7 @@
             <div class="card m-auto">
                 <div class="card-body mt-2 mb-2">
                     <h2 class="card-title">No results</h2>
-                    <p class="card-text">There were no results matching the search: "{{query}}"</p>
+                    <p class="card-text">There are no results.</p>
                 </div>
             </div>
         </div>

@@ -4,7 +4,11 @@ from django.db.models import Q
 from operator import attrgetter
 from . import forms
 from . import models
+
 from django.http import HttpResponse
+
+
+from accounts.models import Account
 
 # Create your views here.
 
@@ -34,7 +38,7 @@ def create_product_view(request):
         author = Account.objects.filter(email=request.user.email).first()
         obj.author = author
         obj.save()
-        form = CreateProductForm()
+        form = forms.CreateProductForm()
     context['form'] = form
     return render(request, 'products/create.html', context)
 
