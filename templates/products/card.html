@@ -1,0 +1,53 @@
+<style type="text/css">
+	.card{
+		max-width: 700px;
+	}
+	.card-body{
+		padding: 20px;
+		width:100%;
+
+	}
+</style>
+        {% if products %}
+
+<div class="container mt-2">
+    <div class="row">
+
+        <!-- Blog Post -->
+        <div class="card m-auto">
+            <a href="{% url 'details' post.slug %}">
+                <img class="card-img-top" src="{{products.image.url}}">
+            </a>
+
+            <div class="card-body mt-2 mb-2">
+                <a href="{% url 'details' post.slug %}">
+                    <h2 class="card-title">{{products.product_name}}</h2>
+                </a>
+                <p class="card-text">{{products.body|safe|truncatechars:180}}</p>
+                {% if products.author == request.user %}
+                <a href="{% url 'edit' post.slug %}" class="btn btn-primary">Update</a>
+                {% endif %}
+                <div class="container mt-2">
+
+                </div>
+            </div>
+
+            <div class="card-footer text-muted">
+                Updated on {{products.date_updated}} by {{products.author}}
+            </div>
+
+        </div>
+    </div>
+    {% else %}
+    <div class="container">
+        <div class="row">
+            <div class="card m-auto">
+                <div class="card-body mt-2 mb-2">
+                    <h2 class="card-title">No results</h2>
+                    <p class="card-text">There were no results matching the search: "{{query}}"</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {%endif%}
+</div>
