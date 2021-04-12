@@ -30,17 +30,18 @@
     
                 <p class="card-text ">{{products.description|safe|truncatechars:180}}</p>
                 {% if products.author == request.user %}
-                <a href="{% url 'edit' post.slug %}" class="btn btn-primary">Update</a>
+                <div class="mx-auto" style="width: 200px;">
+                <a href="{% url 'edit' post.slug %}" class="btn btn-success">Update</a>
+                </div>
                 {% endif %}
                
             </div>
             
-            {% if products.upvote != 0 %}
-            <div class="card-footer text-muted">
-                Upvote {{products.upvote}} 
-            </div>
-            {% endif %}
+            <div class="card-footer  text-muted" >
+                <button type="button"  class="btn btn-primary ml-1 mr-1  ">Up Vote {{products.upvote}} </button>
+                <button type="button" class="btn btn-danger">Down Vote {{products.downvote}} </button>
 
+            </div>
         </div>
     </div>
     {% else %}
