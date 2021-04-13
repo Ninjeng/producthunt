@@ -24,3 +24,17 @@ class UpdateProductForm(forms.ModelForm):
         if commit:
             product_Product.save()
         return product_Product
+
+
+class UpvoteForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['upvote']
+    
+    def save(self, commit=True):
+        product_Product = self.instance
+        product_Product.upvote = self.cleaned_data['upvote']+1
+
+        if commit:
+            product_Product.save()
+        return product_Product

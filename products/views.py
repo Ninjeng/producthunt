@@ -95,3 +95,17 @@ def get_product_queryset(query=None):
         for post in product:
             queryset.append(post)
     return list(set(queryset))
+
+def upvote_view(request, slug):
+    context = {}
+    product = get_object_or_404(models.Product, slug=slug)
+    if request.POST:
+        form = forms.UpvoteForm(request.POST or None, request.FILES or None, instance=product)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            context['success_message'] = "Updated"
+            product = obj
+        return render(request, 'products/card.html', context)
+
+    
