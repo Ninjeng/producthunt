@@ -7,5 +7,4 @@ urlpatterns = [
     path('<slug>/', views.detail_product_view, name='details'),
     path('<slug>/edit/', views.edit_product_view, name='edit'),
     path('<slug>/delete/', views.delete_product_view, name='delete'),
-    path('upvote/',views.upvote_view,name="upvote")
 ]

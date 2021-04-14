@@ -21,8 +21,10 @@ def home(request):
         query = request.GET['q']
         context['query'] = str(query)
     products = sorted(get_product_queryset(query), key=attrgetter('date_updated'), reverse=True)
-    context['products'] = products
-    return render(request, "products/home.html", context)
+    for prod in products:
+        prd = get_object_or_404(models.Product, slug=prod.slug)
+        comments = prod.comments.filter(active=True)
+    return render(request, "products/home.html", {"products":products,"comments":comments})
 
 
 def create_product_view(request):
@@ -46,9 +48,22 @@ def create_product_view(request):
 def detail_product_view(request, slug):
     context = {}
     products = get_object_or_404(models.Product, slug=slug)
-    context['products'] = products
-    return render(request, 'products/detail.html', context)
-
+    comments = products.comments.filter(active=True)
+    new_comment = None
+    if request.method == 'POST':
+        # A comment was posted
+        comment_form = forms.CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            # Create Comment object but don't save to database yet          
+            new_comment = comment_form.save(commit=False)
+            # Assign the current post to the comment
+            new_comment.post = products
+            new_comment.user = request.user
+            # Save the comment to the database
+            new_comment.save()
+    else:
+         comment_form = forms.CommentForm() 
+    return render(request, 'products/detail.html', {"product":products,"comments":comments,"new_comment":new_comment,"comment_form":comment_form})
 
 def delete_product_view(request, slug=None):
     user = request.user
@@ -95,17 +110,3 @@ def get_product_queryset(query=None):
         for post in product:
             queryset.append(post)
     return list(set(queryset))
-
-def upvote_view(request, slug):
-    context = {}
-    product = get_object_or_404(models.Product, slug=slug)
-    if request.POST:
-        form = forms.UpvoteForm(request.POST or None, request.FILES or None, instance=product)
-        if form.is_valid():
-            obj = form.save(commit=False)
-            obj.save()
-            context['success_message'] = "Updated"
-            product = obj
-        return render(request, 'products/card.html', context)
-
-    

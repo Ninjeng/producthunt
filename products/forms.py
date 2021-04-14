@@ -1,17 +1,17 @@
 from django import forms
 
-from .models import Product
+from .models import Product,Comment
 
 
 class CreateProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['product_name', 'description', 'image','upvote','downvote']
+        fields = ['product_name', 'description', 'image',]
 
 class UpdateProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['product_name', 'description', 'image','upvote','downvote']
+        fields = ['product_name', 'description', 'image',]
 
     def save(self, commit=True):
         product_Product = self.instance
@@ -26,15 +26,7 @@ class UpdateProductForm(forms.ModelForm):
         return product_Product
 
 
-class UpvoteForm(forms.ModelForm):
+class CommentForm(forms.ModelForm):
     class Meta:
-        model = Product
-        fields = ['upvote']
-    
-    def save(self, commit=True):
-        product_Product = self.instance
-        product_Product.upvote = self.cleaned_data['upvote']+1
-
-        if commit:
-            product_Product.save()
-        return product_Product
+        model = Comment
+        fields = ('body',)

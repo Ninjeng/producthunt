@@ -13,20 +13,51 @@
 <div class="container">
     <div class="row">
         <div class="card m-auto">
-            {% if products.image.url is not null %}
-            <img class="card-img-top" src="{{products.image.url}}">
+            {% if product.image.url is not null %}
+            <img class="card-img-top" src="{{product.image.url}}">
             {% endif %}
             <div class="card-body mt-2 mb-2">
-                <h2 class="card-title">{{products.product_name}}</h2>
-                <p class="card-text">{{products.description|safe}}</p>
-                 {% if products.author == request.user %}
-			  	<a href="{% url 'edit' products.slug %}" class="btn btn-primary">Update</a>
-                <a href="{% url 'delete' products.slug %}" class="btn btn-danger"> Delete </a>
+                <h2 class="card-title">{{product.product_name}}</h2>
+                <p class="card-text">{{product.description|safe}}</p>
+                 {% if product.author == request.user %}
+			  	<a href="{% url 'edit' product.slug %}" class="btn btn-primary">Update</a>
+                <a href="{% url 'delete' product.slug %}" class="btn btn-danger"> Delete </a>
 			  {% endif %}
             </div>
+
             <div class="card-footer text-muted">
-                Posted on {{products.date_published}} by {{products.author}}
+                Posted on {{product.date_published}} by {{product.author}}
             </div>
+
+            {% if new_comment %}
+                    <h2>Your comment has been added.</h2>
+                {% else %}
+                <div class="card">
+                    <form action="." method="post">
+                        <div class="form-group" >
+                            <label for="body" class="text-danger h-2">Body:</label><br>
+                            <textarea class="m-2" name="body" style="width: 98%; height: 250px;" id="body">
+                            </textarea>
+                        </div>
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary" > Submit </button>
+                      </form>
+                </div>
+                {% endif %}
+            
+            {% for comment in comments %}
+
+            <div class="card m-5" >
+                <div class="card-body">
+                  <h5 class="card-title">{{ forloop.counter }}. {{ comment.user.username }}</h5>
+                  <h6 class="card-subtitle mb-2 text-muted"> {{ comment.created }}</h6>
+                  <p class="card-text">{{ comment.body|linebreaks }} </p>
+                </div>
+              </div>
+                {% empty %}
+                <p>There are no comments yet.</p>
+                {% endfor %}
+                
         </div>
     </div>
 </div>

@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from .forms import RegistrationForm, AuthenticationForm, AccountUpdateForm
 
+from products.models import Product
+
 
 def registration_view(request):
     context = {}
@@ -48,33 +50,32 @@ def login_view(request):
     return render(request, 'accounts/login.html', context)
 
 
-# def profile_view(request):
-#     if not request.user.is_authenticated:
-#         return redirect("login")
-#     context = {}
-#     if request.POST:
-#         form = AccountUpdateForm(request.POST, instance=request.user)
-#         if form.is_valid():
-#             form.initial = {
-#                 "email": request.POST['email'],
-#                 "username": request.POST['username'],
-#             }
-#             form.save()
-#             context['success_message'] = "Updated"
-#     else:
-#         form = AccountUpdateForm(
+def profile_view(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
+    context = {}
+    if request.POST:
+        form = AccountUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.initial = {
+                "email": request.POST['email'],
+                "username": request.POST['username'],
+            }
+            form.save()
+            context['success_message'] = "Updated"
+    else:
+        form = AccountUpdateForm(
+            initial={
+                "email": request.user.email,
+                "username": request.user.username,
+            }
+        )
 
-#             initial={
-#                 "email": request.user.email,
-#                 "username": request.user.username,
-#             }
-#         )
-
-#     context['profile_form'] = form
-#     blog_posts = Post.objects.filter(author=request.user)
-#     context['blog_posts'] = blog_posts
-#     return render(request, "accounts/profile.html", context)
+    context['profile_form'] = form
+    blog_posts = Product.objects.filter(author=request.user)
+    context['blog_posts'] = blog_posts
+    return render(request, "accounts/profile.html", context)
 
 
-# def must_authenticate_view(request):
-#     return render(request, 'accounts/must_authenticate.html', {})
+def must_authenticate_view(request):
+    return render(request, 'accounts/must_authenticate.html', {})

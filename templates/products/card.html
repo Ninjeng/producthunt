@@ -16,60 +16,29 @@
         height: 50px;
     }
 </style>
-{% if products %}
 
+
+{% if products %}
 <div class="container mt-2">
     <div class="row">
-       
-                <!-- Blog Post -->
         <div class="card m-auto mt-5 mb-5">
             <div class="card-body mt-1 mb-1">
                 <a href="{% url 'details' post.slug %}">
                     <img class="card-img-top" src="{{products.image.url}}">
                 </a>
-    
                 <p class="card-text ">{{products.description|safe|truncatechars:180}}</p>
                 {% if products.author == request.user %}
-                <div class="mx-auto" style="width: 200px;">
-                <a href="{% url 'edit' post.slug %}" class="btn btn-success">Update</a>
+                <div class="mx-auto">
+                <a href="{% url 'edit' post.slug %}" class="btn btn-success mb-2" style="width: 100%;">Update</a>
                 </div>
                 {% endif %}
+                <div class="card-footer text-muted">
+                    Posted on {{products.date_published}} by {{product.author}}
+                </div>
                
             </div>
-            
-            <div class="buttons">
-                <button id="down">Downvote</button>
-                    <p id="downvote"></p>
-                <button id="up">Upvote</button>
-                    <p id="upvote"></p>
-                </div>
-                <script>
-                $(document).ready(function(){
-                $("#up").click(function(){
-                    var up = $.post("/upvote", {changeBy: 1}, function(dataBack){
-                
-                        $("#upvote").text(dataBack);
-                    });
-                
-                });
-                $("#down").click(function(){
-                    var down = $.post("/downvote", {changeBy: 1},
-                    function(dataBack){
-                        $("#downvote").text(dataBack);
-                    });
-                
-                  });
-                });
-            </script>
-                <!-- <button type="button"  class="btn btn-primary ml-1 mr-1" type="submit" >Up Vote {{products.upvote}} </button> -->
-                <!-- <button type="button" class="btn btn-danger" type="submit" >Down Vote {{products.downvote}} </button> -->
-
             </div>
         </div>
-        <form  action="submit" method="POST">
-            {% csrf_token %}
-        </form>
-
     </div>
     {% else %}
     <div class="container">
